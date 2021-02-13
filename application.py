@@ -23,8 +23,10 @@ db = scoped_session(sessionmaker(bind=engine))
 
 @app.route("/", methods=['POST', 'GET'])
 def index():
+    if 'username' in session:
+        username = session['username']
+        return render_template('site.html', username=username)
     return render_template('index.html')
-
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
@@ -65,15 +67,22 @@ def login():
         # if there is no username in the database matching the entered username, show error page
         if userdata is None:
             return render_template("error_login.html", err = "No account associated with this username. Please try again.")
-        else:
-            # check the password
-            if check_password_hash(userdata[2],password) is True:
-            # if password is correct, log the user in. If the password is incorrect, show error page
-                return render_template("site.html")
-            else:
-                return render_template("error_login.html", err = "Incorrect password. Please try again.")
+        # check the password
+        if check_password_hash(userdata[2],password) is False:
+            return render_template("error_login.html", err = "Incorrect password. Please try again.")
+        # if password is correct, log the user in and remember session. If the password is incorrect, show error page
+        session['username'] = username
+        return render_template("site.html",username=username)
+
 
 # reroute back to login, for use in error pages
 @app.route('/gotologin', methods=['POST', 'GET'])
 def gotologin():
         return render_template("login.html")
+
+# log out of account
+@app.route('/logout', methods=['POST', 'GET'])
+def logout():
+        # remove the username from the session
+        session.pop('username', None)
+        return render_template("error_login.html", err = "You have been logged out.")
