@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block heading %}
+  Please register for an account!
+{% endblock %}
+
+{% block body %}
+
+  <form action="{{ url_for('register') }}" method="post">
+    <input type="text" name="username" placeholder="Enter a username" required>
+    <input type="password" name="password" placeholder="Enter a password" required>
+    <input type="text" name="email" placeholder="Enter your email" required>
+    <button>Register</button>
+    <a href="/gotologin" class="btn btn-outline-dark" role="button">Already have an account?</a>
+  </form>
+
+{% endblock %}
