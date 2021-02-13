@@ -5,10 +5,9 @@ CREATE TABLE users (
   email VARCHAR NOT NULL UNIQUE
 );
 
-CREATE TABLE users (
-  id SERIAL PRIMARY KEY,
-  username UNIQUE NOT NULL,
-  password VARCHAR NOT NULL
+CREATE TABLE books (
+  isbn VARCHAR PRIMARY KEY,
+  title TEXT,
+  author TEXT,
+  year INTEGER
 );
-
-INSERT INTO users (id,username,password)VALUES('','','')
