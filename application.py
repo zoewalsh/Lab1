@@ -74,6 +74,49 @@ def login():
         session['username'] = username
         return render_template("site.html",username=username)
 
+@app.route('/search', methods=['POST'])
+def search():
+    searched = "%" + request.form.get("searched") + "%"
+    # book titles and author titles are capitalized
+    searched = searched.title()
+    # search based on isbn, title, or author (can be partial)
+    books = db.execute("SELECT isbn, title, author FROM books WHERE (isbn LIKE :searched OR title LIKE :searched OR author LIKE :searched)", {"searched":searched})
+    if books.rowcount == 0:
+        return render_template("noresults.html")
+
+    results = books.fetchall()
+    return render_template("results.html", results=results)
+
+@app.route('/<isbn>', methods=['POST', 'GET'])
+def bookinfo(isbn):
+    if request.method == 'GET':
+        book = db.execute("SELECT * FROM books WHERE isbn=:isbn", {"isbn":isbn}).fetchone()
+        reviews = db.execute("SELECT * FROM reviews WHERE isbn=:isbn", {"isbn":isbn})
+
+        # if there are no reviews for the book
+        if reviews.rowcount == 0:
+            return render_template("book.html", book=book, reviews=[], err="")
+
+        results = reviews.fetchall()
+        return render_template("book.html", book=book, reviews=results, err="")
+
+    if request.method == 'POST':
+        book = db.execute("SELECT * FROM books WHERE isbn=:isbn", {"isbn":isbn}).fetchone()
+        reviews = db.execute("SELECT * FROM reviews WHERE isbn=:isbn", {"isbn":isbn})
+        # if there are no reviews for the book
+        if reviews.rowcount == 0:
+            return render_template("book.html", book=book, reviews=[], err="")
+        results = reviews.fetchall()
+        # if the user has already left a review
+        exist = db.execute("SELECT * FROM reviews WHERE (isbn=:isbn AND username=:username)", {"isbn":isbn, "username":session['username']})
+        if exist.rowcount != 0:
+            return render_template("book.html", book=book, reviews=results,err="You have already reviewed this book.")
+
+        db.execute("INSERT into reviews (isbn, rating, comment, username) VALUES (:isbn, :rating, :comment, :username)",
+            {"isbn": isbn, "rating":request.form.get("rating"), "comment":request.form.get("comment"), "username":session['username']})
+        db.commit()
+
+        return render_template("book.html", book=book, reviews=results, err= "")
 
 # reroute back to login, for use in error pages
 @app.route('/gotologin', methods=['POST', 'GET'])
@@ -86,3 +129,9 @@ def logout():
         # remove the username from the session
         session.pop('username', None)
         return render_template("error_login.html", err = "You have been logged out.")
+
+# reroute back to search
+@app.route('/gotosearch', methods=['POST', 'GET'])
+def gotosearch():
+        username = session['username']
+        return render_template("site.html", username=username)

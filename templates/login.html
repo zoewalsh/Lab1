@@ -5,11 +5,12 @@
 {% endblock %}
 
 {% block body %}
-
+  <h2>
+  <div class="middle">
   <form action="{{ url_for('login') }}" method="post">
     <input type="text" name="username" placeholder="Enter your username" required>
     <input type="password" name="password" placeholder="Enter your password" required>
-    <button>Login</button>
-  </form>
+    <button class="btn btn-outline-secondary">Login</button>
+  </form></div></h2>
 
 {% endblock %}

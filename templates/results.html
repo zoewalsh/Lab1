@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block heading %}
+  <a href="/gotosearch" class="btn btn-outline-dark" role="button">Try another search</a>
+  <a href="/logout" class="btn btn-outline-dark" role="button">Log out</a></h4><br/>
+  <h1>You have results:</h1>
+
+{% endblock %}
+
+{% block body %}
+  <h4><div class="middle">
+  {% for row in results %}
+    <a href="{{ url_for('bookinfo', isbn=row.isbn) }}">{{row[1]}}, {{row[2]}}</a>
+    <br/><br/>
+  {% endfor %}
+  </div></h4>
+{% endblock %}

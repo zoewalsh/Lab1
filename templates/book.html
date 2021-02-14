@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+
+{% block heading %}
+  {{ book['title'] }}
+{% endblock %}
+
+{% block body %}
+  <br/>
+  <h2><div class="middle">Author: {{ book['author'] }}
+  <br/>
+  Year: {{ book['year'] }}
+  <br/>
+  ISBN: {{ book['isbn'] }}</div></h2>
+  <br/>
+  <br/>
+  <form action="{{ url_for('bookinfo', isbn=book['isbn']) }}" method="post">
+    <h1>Leave a review:</h1>
+    <br/>
+    <h2>Rating:
+    <select id="rating" name="rating" required>
+      <option value='1'>1</option>
+      <option value='2'>2</option>
+      <option value='3'>3</option>
+      <option value='4'>4</option>
+      <option value='5'>5</option></select></h2>
+    <h4>5 is best</h4>
+    <h2>Comment:<br/></h2>
+    <h4><textarea rows="4" cols="50" name="comment" type="text" placeholder="Comment"></textarea><br/></h4>
+    <h2><button class="btn btn-outline-secondary">Submit</button></h2>
+  </form>
+  <br/>
+    <h3>{{ err }}</h3>
+  <br/>
+  <h1>Reviews:</h1>
+  {% if reviews == [] %}
+    <h2>There are no reviews for this book</h2>
+  {% else %}
+  <h4><table>
+  <tr><th>Rating:</th>
+  <th>Comment:</th></tr>
+  <tr>
+  {% for row in reviews %}
+    <td>
+    {{row[1]}}
+    </td>
+    <td>
+    {{row[2]}}
+    </td>
+  {% endfor %}
+  </tr></table></h4>
+  {% endif %}
+{% endblock %}

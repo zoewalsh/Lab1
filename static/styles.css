@@ -1,0 +1,42 @@
+.middle{
+  margin:auto;
+  width:100%;
+  padding: 20px;
+  text-align:center;
+}
+
+.left{
+  margin-left: 80px!important;
+  margin-right: 80px!important;
+  width:100%;
+  padding: 20px 20px;
+}
+
+h1{
+  font-family: consolas, sans-serif;
+}
+
+h2{
+  font-family: consolas, sans-serif;
+  color:green;
+}
+
+h3{
+  font-family: consolas, sans-serif;
+  color:red;
+}
+
+h4{
+  font-family: consolas, sans-serif;
+  font-size:75%
+}
+
+table {
+  width: 80%;
+}
+
+table, th, td, tr {
+  border: 1px solid #0B1057;
+  border-collapse: collapse;
+  padding: 10px 0px;
+}

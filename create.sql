@@ -11,3 +11,10 @@ CREATE TABLE books (
   author TEXT,
   year INTEGER
 );
+
+CREATE TABLE reviews (
+  isbn VARCHAR PRIMARY KEY,
+  rating INTEGER,
+  comment TEXT,
+  username VARCHAR NOT NULL
+);
