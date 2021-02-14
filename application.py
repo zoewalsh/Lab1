@@ -68,7 +68,7 @@ def login():
         if userdata is None:
             return render_template("error_login.html", err = "No account associated with this username. Please try again.")
         # check the password
-        if check_password_hash(userdata[2],password) is False:
+        if check_password_hash(userdata['password'],password) is False:
             return render_template("error_login.html", err = "Incorrect password. Please try again.")
         # if password is correct, log the user in and remember session. If the password is incorrect, show error page
         session['username'] = username

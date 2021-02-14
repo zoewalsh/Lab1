@@ -6,37 +6,40 @@
 }
 
 .left{
-  margin-left: 80px!important;
-  margin-right: 80px!important;
+  margin-left: 80px;
+  margin-right: 80px;
   width:100%;
   padding: 20px 20px;
 }
 
 h1{
   font-family: consolas, sans-serif;
+  color:#212F3D;
 }
 
 h2{
   font-family: consolas, sans-serif;
-  color:green;
+  color:#1A5276;
 }
 
 h3{
   font-family: consolas, sans-serif;
-  color:red;
+  color:#A93226;
 }
 
 h4{
   font-family: consolas, sans-serif;
+  color:#4D5656;
   font-size:75%
 }
 
-table {
-  width: 80%;
+h4{
+  font-family: consolas, sans-serif;
+  color:#1A5276;
 }
 
-table, th, td, tr {
-  border: 1px solid #0B1057;
+table, th, td {
+  border: 1px solid black;
   border-collapse: collapse;
-  padding: 10px 0px;
+  width: 80%;
 }

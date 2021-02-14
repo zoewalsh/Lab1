@@ -1,7 +1,9 @@
 {% extends "layout.html" %}
 
 {% block heading %}
-  {{ book['title'] }}
+  <a href="/gotosearch" class="btn btn-outline-dark" role="button">Search</a>
+  <a href="/logout" class="btn btn-outline-dark" role="button">Log out</a></h4><br/>
+  <h1>{{ book['title'] }}</h1>
 {% endblock %}
 
 {% block body %}
@@ -13,8 +15,9 @@
   ISBN: {{ book['isbn'] }}</div></h2>
   <br/>
   <br/>
+  <div class="left">
   <form action="{{ url_for('bookinfo', isbn=book['isbn']) }}" method="post">
-    <h1>Leave a review:</h1>
+    <h5>Leave a review:</h5>
     <br/>
     <h2>Rating:
     <select id="rating" name="rating" required>
@@ -31,9 +34,10 @@
   <br/>
     <h3>{{ err }}</h3>
   <br/>
-  <h1>Reviews:</h1>
+  <div>
+  <h5>Reviews:</h5>
   {% if reviews == [] %}
-    <h2>There are no reviews for this book</h2>
+    <h2>There are no reviews for this book.</h2>
   {% else %}
   <h4><table>
   <tr><th>Rating:</th>

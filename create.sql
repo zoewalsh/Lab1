@@ -1,6 +1,5 @@
 CREATE TABLE users (
-  id SERIAL PRIMARY KEY,
-  username VARCHAR NOT NULL UNIQUE,
+  username VARCHAR PRIMARY KEY,
   password VARCHAR NOT NULL,
   email VARCHAR NOT NULL UNIQUE
 );
@@ -13,8 +12,9 @@ CREATE TABLE books (
 );
 
 CREATE TABLE reviews (
-  isbn VARCHAR PRIMARY KEY,
-  rating INTEGER,
+  id AUTO_INCREMENT PRIMARY KEY,
+  isbn VARCHAR NOT NULL,
+  rating INTEGER NOT NULL,
   comment TEXT,
   username VARCHAR NOT NULL
 );
