@@ -12,7 +12,6 @@ CREATE TABLE books (
 );
 
 CREATE TABLE reviews (
-  id AUTO_INCREMENT PRIMARY KEY,
   isbn VARCHAR NOT NULL,
   rating INTEGER NOT NULL,
   comment TEXT,

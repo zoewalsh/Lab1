@@ -4,10 +4,10 @@
 {% endblock %}
 
 {% block body %}
-  <h4>You are logged in as: {{ username }}<br/>
-  <a href="/logout" class="btn btn-outline-dark" role="button">Log out</a></h4>
+  <div class="left"><h4>You are logged in as: {{ username }}<br/><br/>
+  <a href="/logout" class="btn btn-outline-dark" role="button">Log out</a></h4></div>
   <div class="middle">
-    <h4>Search by Title, Author, or ISBN</h4>
+    <h5>Search by Title, Author, or ISBN</h5>
     <h2>
     <form action="{{ url_for('search') }}" method="post">
       <input type="text" name="searched" placeholder="Search here" required>

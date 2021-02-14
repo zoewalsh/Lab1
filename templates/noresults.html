@@ -1,8 +1,9 @@
 {% extends "layout.html" %}
 
   {% block heading %}
-    <h3>Your search returned no results, please try again.</h3>
-    <h2><a href="/gotosearch" class="btn btn-outline-dark" role="button">Back to search</a></h2>
+    <h3>{{ err }}</h3>
+    <h2><a href="/gotosearch" class="btn btn-outline-dark" role="button">Back to search</a>
+    <a href="/logout" class="btn btn-outline-dark" role="button">Log out</a></h2>
   {% endblock %}
 
 {% block body %}

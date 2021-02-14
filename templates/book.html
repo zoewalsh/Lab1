@@ -19,38 +19,37 @@
   <form action="{{ url_for('bookinfo', isbn=book['isbn']) }}" method="post">
     <h5>Leave a review:</h5>
     <br/>
-    <h2>Rating:
+    <h6>Rating:
     <select id="rating" name="rating" required>
       <option value='1'>1</option>
       <option value='2'>2</option>
       <option value='3'>3</option>
       <option value='4'>4</option>
-      <option value='5'>5</option></select></h2>
-    <h4>5 is best</h4>
-    <h2>Comment:<br/></h2>
+      <option value='5'>5</option></select></h6>
+    <h4>(5 is best)</h4>
+    <h6>Comment:<br/></h6>
     <h4><textarea rows="4" cols="50" name="comment" type="text" placeholder="Comment"></textarea><br/></h4>
     <h2><button class="btn btn-outline-secondary">Submit</button></h2>
   </form>
   <br/>
     <h3>{{ err }}</h3>
   <br/>
-  <div>
   <h5>Reviews:</h5>
   {% if reviews == [] %}
-    <h2>There are no reviews for this book.</h2>
+    <h4>There are no reviews for this book.</h4>
   {% else %}
   <h4><table>
   <tr><th>Rating:</th>
   <th>Comment:</th></tr>
-  <tr>
   {% for row in reviews %}
+  <tr>
     <td>
     {{row[1]}}
     </td>
     <td>
     {{row[2]}}
-    </td>
+    </td></tr>
   {% endfor %}
-  </tr></table></h4>
+  </table></h4></div>
   {% endif %}
 {% endblock %}

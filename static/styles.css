@@ -15,31 +15,50 @@
 h1{
   font-family: consolas, sans-serif;
   color:#212F3D;
+  font-size:40px!important;
 }
 
 h2{
   font-family: consolas, sans-serif;
   color:#1A5276;
+  font-size:32px!important;
 }
 
 h3{
   font-family: consolas, sans-serif;
   color:#A93226;
+  font-size:26px!important;
 }
 
 h4{
   font-family: consolas, sans-serif;
   color:#4D5656;
-  font-size:75%
+  font-size:18px!important;
 }
 
-h4{
+h5{
   font-family: consolas, sans-serif;
   color:#1A5276;
+  font-size:26px!important;
 }
 
-table, th, td {
+h6{
+  font-family: consolas, sans-serif;
+  color:#1A5276;
+  font-size:23px!important;
+}
+
+table {
   border: 1px solid black;
   border-collapse: collapse;
   width: 80%;
+}
+
+th, tr, td {
+  border: 1px solid black!important;
+  padding:20px;
+}
+
+a{
+  color:#16A085!important;
 }
