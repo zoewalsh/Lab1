@@ -10,6 +10,8 @@ import requests
 
 app = Flask(__name__)
 
+app.config['JSON_SORT_KEYS'] = False
+
 # Check for environment variable
 if not os.getenv("DATABASE_URL"):
     raise RuntimeError("DATABASE_URL is not set")
@@ -143,6 +145,28 @@ def bookinfo(isbn):
         reviews = db.execute("SELECT * FROM reviews WHERE isbn=:isbn", {"isbn":isbn}).fetchall()
 
         return render_template("book.html", book=book, reviews=reviews, google=google, err= "Review submitted.")
+
+@app.route("/api/<isbn>", methods=['GET'])
+def api(isbn):
+    # Google books API key
+    key = "AIzaSyA0RrFKJyniz8S_4aZhIj9tXBRpWH6yPv8"
+    # use isbn to request data from google api and convert to json object
+    revs = requests.get("https://www.googleapis.com/books/v1/volumes", params={"key":key,"q":isbn})
+    googlerev = revs.json()
+    item = googlerev['items'][0]['volumeInfo']
+    ISBN_13 = googlerev['items'][0]['volumeInfo']['industryIdentifiers'][1]['identifier']
+    # use google books API to get info
+    book = {
+        "title": item.get('title'),
+        "author": googlerev['items'][0]['volumeInfo']['authors'][0],
+        "publishedDate": item.get('publishedDate'),
+        "ISBN_10": isbn,
+        "ISBN_13": ISBN_13,
+        "averageRating": item.get('averageRating'),
+        "ratingsCount": item.get('ratingsCount')
+    }
+    return(jsonify(book))
+
 
 # reroute back to login, for use in error pages
 @app.route('/gotologin', methods=['POST', 'GET'])
