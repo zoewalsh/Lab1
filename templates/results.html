@@ -10,7 +10,7 @@
 {% block body %}
   <h4><div class="middle">
   {% for row in results %}
-    <a href="{{ url_for('bookinfo', isbn=row.isbn) }}">{{row[1]}}, {{row[2]}}</a>
+    <a href="/{{row['isbn']}}">{{row[1]}}, {{row[2]}}</a>
     <br/><br/>
   {% endfor %}
   </div></h4>
