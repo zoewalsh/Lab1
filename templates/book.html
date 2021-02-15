@@ -16,9 +16,12 @@
   <br/>
   <br/>
   <div class="left">
+  <h5>Google Reviews:
+  <h4>Average Rating: {{ averageRating }}<br/>
+  Number of reviews: {{ reviewCount }}<br/><br/>
+  </h4>
   <form action="{{ url_for('bookinfo', isbn=book['isbn']) }}" method="post">
     <h5>Leave a review:</h5>
-    <br/>
     <h6>Rating:
     <select id="rating" name="rating" required>
       <option value='1'>1</option>
@@ -31,9 +34,7 @@
     <h4><textarea rows="4" cols="50" name="comment" type="text" placeholder="Comment"></textarea><br/></h4>
     <h2><button class="btn btn-outline-secondary">Submit</button></h2>
   </form>
-  <br/>
-    <h3>{{ err }}</h3>
-  <br/>
+    <h3>{{ err }}</h3><br/>
   <h5>Reviews:</h5>
   {% if reviews == [] %}
     <h4>There are no reviews for this book.</h4>

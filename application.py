@@ -5,6 +5,8 @@ from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from werkzeug.security import generate_password_hash, check_password_hash
+import requests
+import json
 
 app = Flask(__name__)
 
@@ -93,19 +95,23 @@ def bookinfo(isbn):
         # query
         book = db.execute("SELECT * FROM books WHERE isbn=:isbn", {"isbn":isbn}).fetchone()
         reviews = db.execute("SELECT * FROM reviews WHERE isbn=:isbn", {"isbn":isbn})
-
+        results = reviews.fetchall()
+        id = "isbn:"+isbn
+        # Google books API key
+        key = "AIzaSyA0RrFKJyniz8S_4aZhIj9tXBRpWH6yPv8"
+        # use isbn to request reviews and convert to json object
+        revs = requests.get("https://www.googleapis.com/books/v1/volumes", params={"key":key,"q": id})
+        googlerev = revs.json()
         # if there are no reviews for the book
         if reviews.rowcount == 0:
-            return render_template("book.html", book=book, reviews=[], err="")
-
-        results = reviews.fetchall()
+            return render_template("book.html", book=book, reviews=[], averageRating=googlerev["items"][0]["volumeInfo"]["averageRating"], reviewCount=googlerev["items"][0]["volumeInfo"]["ratingsCount"], err="")
 
         # if the user has already left a review, show a message
         exist = db.execute("SELECT * FROM reviews WHERE (isbn=:isbn AND username=:username)", {"isbn":isbn, "username":session['username']})
         if exist.rowcount != 0:
-            return render_template("book.html", book=book, reviews=results, err="Note: You have already left a review for this book.")
+            return render_template("book.html", book=book, reviews=results, averageRating=googlerev["items"][0]["volumeInfo"]["averageRating"], reviewCount=googlerev["items"][0]["volumeInfo"]["ratingsCount"], err="Note: You have already left a review for this book.")
 
-        return render_template("book.html", book=book, reviews=results, err="")
+        return render_template("book.html", book=book, averageRating=googlerev["items"][0]["volumeInfo"]["averageRating"], reviewCount=googlerev["items"][0]["volumeInfo"]["ratingsCount"], err="")
 
     if request.method == 'POST':
 
@@ -118,12 +124,18 @@ def bookinfo(isbn):
         db.execute("INSERT into reviews (isbn, rating, comment, username) VALUES (:isbn, :rating, :comment, :username)",
             {"isbn": isbn, "rating":request.form.get("rating"), "comment":request.form.get("comment"), "username":session['username']})
         db.commit()
-        flash('Review submitted.')
+
+        # Google books API key
+        key = "AIzaSyA0RrFKJyniz8S_4aZhIj9tXBRpWH6yPv8"
+        # use isbn to request reviews and convert to json object
+        revs = requests.get("https://www.googleapis.com/books/v1/volumes", params={"key":key,"q":isbn})
+        googlerev = revs.json()
 
         # query again
         book = db.execute("SELECT * FROM books WHERE isbn=:isbn", {"isbn":isbn}).fetchone()
         reviews = db.execute("SELECT * FROM reviews WHERE isbn=:isbn", {"isbn":isbn}).fetchall()
-        return render_template("book.html", book=book, reviews=reviews, err= "")
+
+        return render_template("book.html", book=book, reviews=reviews, averageRating=googlerev["items"][0]["volumeInfo"]["averageRating"], reviewCount=googlerev["items"][0]["volumeInfo"]["ratingsCount"], err= "Review submitted.")
 
 # reroute back to login, for use in error pages
 @app.route('/gotologin', methods=['POST', 'GET'])
@@ -142,3 +154,13 @@ def logout():
 def gotosearch():
         username = session['username']
         return render_template("site.html", username=username)
+
+class Book:
+    def __init__(self, title, author, publishedDate, ISBN_10, ISBN_13, reviewCount, averageRating):
+        self.title = title
+        self.author = author
+        self.publishedDate = publishedDate
+        self.ISBN_10 = ISBN_10
+        self.ISBN_13 = ISBN_13
+        self.reviewCount = reviewCount
+        self.averageRating = averageRating
