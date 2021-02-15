@@ -102,13 +102,13 @@ def bookinfo(isbn):
     revs = requests.get("https://www.googleapis.com/books/v1/volumes", params={"key":key,"q":isbn})
     googlerev = revs.json()
     item = googlerev['items'][0]['volumeInfo']
+    # create google object with averageRating and ratingsCount attributes
     google=[]
     averageRating = item.get('averageRating')
     ratingsCount = item.get('ratingsCount')
-    print(averageRating)
-    print(ratingsCount)
     google.append(averageRating)
     google.append(ratingsCount)
+
     if request.method == 'GET':
         # query
         book = db.execute("SELECT * FROM books WHERE isbn=:isbn", {"isbn":isbn}).fetchone()
