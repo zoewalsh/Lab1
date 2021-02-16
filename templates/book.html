@@ -18,7 +18,7 @@
   <div class="left">
   <h5>Google Reviews:
   <h4>Average Rating: {{ google[0] }}<br/>
-  Number of reviews: {{ google[1] }}<br/><br/>
+  Number of Reviews: {{ google[1] }}<br/><br/>
   </h4>
   <form action="{{ url_for('bookinfo', isbn=book['isbn']) }}" method="post">
     <h5>Leave a review:</h5>

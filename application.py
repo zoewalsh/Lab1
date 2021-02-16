@@ -10,8 +10,6 @@ import requests
 
 app = Flask(__name__)
 
-app.config['JSON_SORT_KEYS'] = False
-
 # Check for environment variable
 if not os.getenv("DATABASE_URL"):
     raise RuntimeError("DATABASE_URL is not set")
@@ -148,6 +146,10 @@ def bookinfo(isbn):
 
 @app.route("/api/<isbn>", methods=['GET'])
 def api(isbn):
+    # return a 404 error if the isbn does not exist in our database
+    exist = db.execute("SELECT * FROM books WHERE isbn=:isbn",{"isbn":isbn})
+    if exist.rowcount==0:
+        abort(404)
     # Google books API key
     key = "AIzaSyA0RrFKJyniz8S_4aZhIj9tXBRpWH6yPv8"
     # use isbn to request data from google api and convert to json object
@@ -187,12 +189,6 @@ def gotosearch():
         username = session['username']
         return render_template("site.html", username=username)
 
-class Book:
-    def __init__(self, title, author, publishedDate, ISBN_10, ISBN_13, reviewCount, averageRating):
-        self.title = title
-        self.author = author
-        self.publishedDate = publishedDate
-        self.ISBN_10 = ISBN_10
-        self.ISBN_13 = ISBN_13
-        self.reviewCount = reviewCount
-        self.averageRating = averageRating
+@app.errorhandler(404)
+def resource_not_found(e):
+    return jsonify(error=str(e)), 404
