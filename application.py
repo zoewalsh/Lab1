@@ -149,7 +149,7 @@ def api(isbn):
     # return a 404 error if the isbn does not exist in our database
     exist = db.execute("SELECT * FROM books WHERE isbn=:isbn",{"isbn":isbn})
     if exist.rowcount==0:
-        abort(404)
+        return render_template("error_login.html", err="404 Error: ISBN not found. Please check spelling or log in to search for a book.")
     # Google books API key
     key = "AIzaSyA0RrFKJyniz8S_4aZhIj9tXBRpWH6yPv8"
     # use isbn to request data from google api and convert to json object
@@ -188,7 +188,3 @@ def logout():
 def gotosearch():
         username = session['username']
         return render_template("site.html", username=username)
-
-@app.errorhandler(404)
-def resource_not_found(e):
-    return jsonify(error=str(e)), 404
